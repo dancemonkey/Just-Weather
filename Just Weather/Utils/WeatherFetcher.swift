@@ -14,10 +14,11 @@ class WeatherFetcher {
   
   let darkSkyURL = "https://api.darksky.net/forecast/"
   let darkSkyKey = "e8cce189cf2466d799e75779bdf4fc37/"
+  let exclude = "minutely"
   
-  func getWeeklyForecast(for location: (lat: Double, long: Double), completion: @escaping (String) -> ()) {
+  func getWeeklyForecast(for location: (lat: Double, long: Double), completion: @escaping (String, Double) -> ()) {
     
-    guard let url = URL(string: "\(darkSkyURL)\(darkSkyKey)\(location.lat),\(location.long)") else {
+    guard let url = URL(string: "\(darkSkyURL)\(darkSkyKey)\(location.lat),\(location.long)?exclude=[\(exclude)]") else {
       return
     }
     
@@ -31,18 +32,11 @@ class WeatherFetcher {
         if let error = responseError {
           print(error.localizedDescription)
         } else if let jsonData = responseData {
-          // decode jsonData to a forecast struct that I have yet to create
           do {
-            let forecast = try JSONSerialization.jsonObject(with: jsonData, options: []) as! [String: AnyObject]
-            
-            // initialize forecast model object from the forecast JSON serialization            
-            if let currently = forecast["currently"] as? [String: AnyObject] {
-              let iconName = currently["icon"] as! String
-              completion(iconName)
-            }
-            
-          } catch let error as NSError {
-            print(error.localizedDescription)
+            let forecast = try JSONDecoder().decode(Forecast.self, from: jsonData)
+            completion(forecast.currently.icon, forecast.currently.temperature)
+          } catch {
+            print(error)
           }
         }
       }

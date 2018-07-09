@@ -24,16 +24,26 @@
                                     <constraint firstAttribute="height" constant="300" id="luV-jo-8hh"/>
                                 </constraints>
                             </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Temp" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Kc3-hh-B5m">
+                                <rect key="frame" x="16" y="499" width="343" height="26.5"/>
+                                <fontDescription key="fontDescription" type="system" weight="thin" pointSize="22"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <constraints>
+                            <constraint firstItem="Kc3-hh-B5m" firstAttribute="top" secondItem="k60-ix-mh0" secondAttribute="bottom" constant="16" id="3VH-UA-mDV"/>
                             <constraint firstItem="k60-ix-mh0" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="DyQ-Q1-53h"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="Kc3-hh-B5m" secondAttribute="trailing" constant="16" id="VhY-0i-G6D"/>
+                            <constraint firstItem="Kc3-hh-B5m" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="ZHx-Lf-bSU"/>
                             <constraint firstItem="k60-ix-mh0" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="aj7-gS-q7e"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="k60-ix-mh0" secondAttribute="trailing" constant="16" id="z74-it-Sbo"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <connections>
+                        <outlet property="tempLabel" destination="Kc3-hh-B5m" id="jiY-Xm-J2I"/>
                         <outlet property="weatherIcon" destination="k60-ix-mh0" id="0In-v4-J7P"/>
                     </connections>
                 </viewController>
