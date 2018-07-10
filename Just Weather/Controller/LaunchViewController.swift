@@ -13,6 +13,7 @@ class LaunchViewController: UIViewController, CLLocationManagerDelegate {
   
   @IBOutlet weak var weatherIcon: UIImageView!
   @IBOutlet weak var tempLabel: UILabel!
+  @IBOutlet weak var refreshBtn: UIBarButtonItem!
   
   var locManager: CLLocationManager!
   var fetcher: WeatherFetcher?
@@ -21,6 +22,7 @@ class LaunchViewController: UIViewController, CLLocationManagerDelegate {
     super.viewDidLoad()
     fetcher = WeatherFetcher()
     setupLocationManager()
+    tempLabel.text = ""
   }
   
   func setupLocationManager() {
@@ -31,6 +33,16 @@ class LaunchViewController: UIViewController, CLLocationManagerDelegate {
       locManager.startUpdatingLocation()
     }
   }
+  
+  @IBAction func refreshWeather(sender: UIBarButtonItem) {
+    locManager.startUpdatingLocation()
+  }
+  
+}
+
+extension LaunchViewController {
+  
+  // MARK: CLLocationManager
   
   func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
     if status == .authorizedWhenInUse {
@@ -47,16 +59,14 @@ class LaunchViewController: UIViewController, CLLocationManagerDelegate {
     if let fetcher = self.fetcher {
       fetcher.getWeeklyForecast(for: (lat: userLocation.coordinate.latitude, long: userLocation.coordinate.longitude)) {iconName, temp in
         
-        // stop updating location in the closure, until "refresh" is hit
-        self.locManager.stopUpdatingLocation()
-        
         // populate view objects in the closure
         self.weatherIcon.image = UIImage(named: iconName)
         self.tempLabel.text = "\(temp)"
+        
+        // stop updating location in the closure, until "refresh" is hit
+        self.locManager.stopUpdatingLocation()
       }
     }
-    
   }
-  
 }
 

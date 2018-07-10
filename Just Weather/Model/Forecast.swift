@@ -40,7 +40,7 @@ struct Forecast: Codable {
     var summary: String
     var icon: String
     
-    // Using this for now, but maybe replace with more specific data structure later
+    // Using this for now, but replace with more specific data structure later
     var data: [CurrentWeather]
   }
   
@@ -48,7 +48,7 @@ struct Forecast: Codable {
     var summary: String
     var icon: String
     
-    // Using this for now, but maybe replace with more specific data structure later
+    // Using this for now, but replace with more specific data structure later
     // Def need a new one, to handle diff temperature data points for daily
 //    var data: [CurrentWeather]
   }
