@@ -59,12 +59,13 @@ extension LaunchViewController {
     if let fetcher = self.fetcher {
       fetcher.getWeeklyForecast(for: (lat: userLocation.coordinate.latitude, long: userLocation.coordinate.longitude)) {iconName, temp in
         
-        // populate view objects in the closure
-        self.weatherIcon.image = UIImage(named: iconName)
-        self.tempLabel.text = "\(temp)"
-        
         // stop updating location in the closure, until "refresh" is hit
         self.locManager.stopUpdatingLocation()
+        
+        // populate view objects in the closure
+        self.weatherIcon.image = UIImage(named: iconName)
+        self.tempLabel.text = "\(temp)°"
+        
       }
     }
   }

@@ -16,7 +16,7 @@ class WeatherFetcher {
   let darkSkyKey = "e8cce189cf2466d799e75779bdf4fc37/"
   let exclude = "minutely"
   
-  func getWeeklyForecast(for location: (lat: Double, long: Double), completion: @escaping (String, Double) -> ()) {
+  func getWeeklyForecast(for location: (lat: Double, long: Double), completion: @escaping (String, String) -> ()) {
     
     guard let url = URL(string: "\(darkSkyURL)\(darkSkyKey)\(location.lat),\(location.long)?exclude=[\(exclude)]") else {
       return
@@ -34,7 +34,7 @@ class WeatherFetcher {
         } else if let jsonData = responseData {
           do {
             let forecast = try JSONDecoder().decode(Forecast.self, from: jsonData)
-            completion(forecast.currently.icon, forecast.currently.temperature)
+            completion(forecast.currently.icon, self.temperatureFormat(from: forecast.currently.temperature))
           } catch {
             print(error)
           }
@@ -42,6 +42,17 @@ class WeatherFetcher {
       }
     }
     task.resume()
+  }
+  
+  func temperatureFormat(from temperature: Double) -> String {
+    let formatter = NumberFormatter()
+    formatter.usesGroupingSeparator = false
+    formatter.numberStyle = .decimal
+    formatter.minimumFractionDigits = 0
+    formatter.maximumFractionDigits = 0
+    formatter.locale = Locale.current
+    
+    return formatter.string(from: NSNumber(value: temperature))!
   }
   
 }
