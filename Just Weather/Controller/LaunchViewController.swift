@@ -14,15 +14,18 @@ class LaunchViewController: UIViewController, CLLocationManagerDelegate {
   @IBOutlet weak var weatherIcon: UIImageView!
   @IBOutlet weak var tempLabel: UILabel!
   @IBOutlet weak var refreshBtn: UIBarButtonItem!
+  @IBOutlet weak var summaryLbl: UILabel!
   
   var locManager: CLLocationManager!
   var fetcher: WeatherFetcher?
+  var weatherInfoView: WeatherInfoVC?
   
   override func viewDidLoad() {
     super.viewDidLoad()
     fetcher = WeatherFetcher()
     setupLocationManager()
     tempLabel.text = ""
+    summaryLbl.text = ""
   }
   
   func setupLocationManager() {
@@ -36,6 +39,12 @@ class LaunchViewController: UIViewController, CLLocationManagerDelegate {
   
   @IBAction func refreshWeather(sender: UIBarButtonItem) {
     locManager.startUpdatingLocation()
+  }
+  
+  override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+    if segue.identifier == "showWeatherInfo" {
+      weatherInfoView = segue.destination as? WeatherInfoVC
+    }
   }
   
 }
@@ -57,15 +66,16 @@ extension LaunchViewController {
     
     // do weather stuff with lat and long
     if let fetcher = self.fetcher {
-      fetcher.getWeeklyForecast(for: (lat: userLocation.coordinate.latitude, long: userLocation.coordinate.longitude)) {iconName, temp in
+      fetcher.getForecast(.all, for: (lat: userLocation.coordinate.latitude, long: userLocation.coordinate.longitude)) {forecast in
         
         // stop updating location in the closure, until "refresh" is hit
         self.locManager.stopUpdatingLocation()
         
         // populate view objects in the closure
-        self.weatherIcon.image = UIImage(named: iconName)
-        self.tempLabel.text = "\(temp)°"
-        
+        self.weatherIcon.image = UIImage(named: forecast.currently.icon)
+        self.tempLabel.text = "\(self.temperatureFormat(from: forecast.currently.temperature))°"
+        self.summaryLbl.text = forecast.currently.summary
+        self.weatherInfoView?.setupForecastLabels(with: forecast)
       }
     }
   }

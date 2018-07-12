@@ -39,18 +39,41 @@ struct Forecast: Codable {
   struct HourlyWeather: Codable {
     var summary: String
     var icon: String
+    var data: [HourlyData]
     
-    // Using this for now, but replace with more specific data structure later
-    var data: [CurrentWeather]
+    struct HourlyData: Codable {
+      var time: Double
+      var summary: String
+      var icon: String
+      var precipProbability: Double?
+      var precipType: String?
+      var temperature: Double
+      var apparentTemperature: Double
+      var dewPoint: Double
+      var humidity: Double
+    }
   }
   
   struct DailyWeather: Codable {
     var summary: String
     var icon: String
-    
-    // Using this for now, but replace with more specific data structure later
-    // Def need a new one, to handle diff temperature data points for daily
-//    var data: [CurrentWeather]
+    var data: [DailyData]
+
+    struct DailyData: Codable {
+      var time: Double
+      var summary: String
+      var icon: String
+      var sunriseTime: Double
+      var sunsetTime: Double
+      var moonPhase: Double
+      var precipProbability: Double?
+      var precipType: String?
+      var temperatureHigh: Double
+      var temperatureLow: Double
+      var dewPoint: Double
+      var humidity: Double
+    }
+
   }
   
   struct WeatherAlerts: Codable {
