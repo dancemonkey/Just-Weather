@@ -311,8 +311,8 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Temp°" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nOV-LT-nq0">
-                                                    <rect key="frame" x="16" y="0.0" width="52" height="75"/>
-                                                    <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
+                                                    <rect key="frame" x="16" y="0.0" width="50" height="75"/>
+                                                    <fontDescription key="fontDescription" type="italicSystem" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
@@ -342,8 +342,8 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Summary" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="66e-XB-ASA">
-                                                    <rect key="frame" x="16" y="11" width="72" height="22"/>
-                                                    <fontDescription key="fontDescription" type="system" weight="light" pointSize="17"/>
+                                                    <rect key="frame" x="16" y="11" width="73" height="22"/>
+                                                    <fontDescription key="fontDescription" type="italicSystem" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
@@ -352,6 +352,28 @@
                                                 <constraint firstItem="66e-XB-ASA" firstAttribute="top" secondItem="8Uy-yf-gdh" secondAttribute="topMargin" id="Hpb-nX-oXD"/>
                                                 <constraint firstItem="66e-XB-ASA" firstAttribute="leading" secondItem="8Uy-yf-gdh" secondAttribute="leading" constant="16" id="Zc5-Ym-7X6"/>
                                                 <constraint firstItem="66e-XB-ASA" firstAttribute="bottom" secondItem="8Uy-yf-gdh" secondAttribute="bottomMargin" id="ddy-BW-VnJ"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" rowHeight="44" id="wdv-fU-uKp">
+                                        <rect key="frame" x="0.0" y="411" width="343" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="wdv-fU-uKp" id="Zfg-Xy-LyU">
+                                            <rect key="frame" x="0.0" y="0.0" width="343" height="44"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Chance of rain" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="t4S-Ti-DQJ">
+                                                    <rect key="frame" x="16" y="0.0" width="111.5" height="44"/>
+                                                    <fontDescription key="fontDescription" type="italicSystem" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="t4S-Ti-DQJ" firstAttribute="leading" secondItem="Zfg-Xy-LyU" secondAttribute="leading" constant="16" id="Y5S-Ih-hWy"/>
+                                                <constraint firstItem="t4S-Ti-DQJ" firstAttribute="top" secondItem="Zfg-Xy-LyU" secondAttribute="top" id="bqn-YB-EWX"/>
+                                                <constraint firstAttribute="bottom" secondItem="t4S-Ti-DQJ" secondAttribute="bottom" id="jDK-a1-F3U"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -371,6 +393,7 @@
                         <outlet property="rainChanceLbl" destination="XBM-Xa-pgf" id="r1m-zg-7Xz"/>
                         <outlet property="tempHighLbl" destination="bsO-wp-pal" id="3dG-XY-OY8"/>
                         <outlet property="tempLowLbl" destination="eG3-KJ-l1w" id="tjB-Ic-WMC"/>
+                        <outlet property="tomorrowChanceOfRainLbl" destination="t4S-Ti-DQJ" id="GAS-WM-Jrr"/>
                         <outlet property="tomorrowIcon" destination="gVm-On-6HZ" id="nKC-Lx-Io4"/>
                         <outlet property="tomorrowSummaryLbl" destination="66e-XB-ASA" id="P8R-e5-fWp"/>
                         <outlet property="tomorrowTemp" destination="nOV-LT-nq0" id="hbi-B8-Ft6"/>

@@ -18,7 +18,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" alpha="0.20000000000000001" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="thunderstorm" translatesAutoresizingMaskIntoConstraints="NO" id="jl7-Dw-RiX">
+                            <imageView userInteractionEnabled="NO" alpha="0.5" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="thunderstorm" translatesAutoresizingMaskIntoConstraints="NO" id="jl7-Dw-RiX">
                                 <rect key="frame" x="37" y="183.5" width="300" height="300"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="300" id="buN-AO-Nv9"/>
@@ -26,7 +26,7 @@
                                 </constraints>
                             </imageView>
                         </subviews>
-                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                        <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="jl7-Dw-RiX" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="ihd-md-8CO"/>
                             <constraint firstItem="jl7-Dw-RiX" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="ny7-x1-ix4"/>

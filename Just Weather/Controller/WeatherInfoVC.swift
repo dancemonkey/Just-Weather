@@ -20,11 +20,12 @@ class WeatherInfoVC: UITableViewController {
   @IBOutlet weak var tomorrowTemp: UILabel!
   @IBOutlet weak var tomorrowIcon: UIImageView!
   @IBOutlet weak var tomorrowSummaryLbl: UILabel!
+  @IBOutlet weak var tomorrowChanceOfRainLbl: UILabel!
   var outlets: [UILabel] = [UILabel]()
   
   override func viewDidLoad() {
     super.viewDidLoad()
-    outlets = [humidityLbl, dewPointLbl, apparentTempLbl, tempLowLbl, tempHighLbl, rainChanceLbl, tomorrowTemp, tomorrowSummaryLbl]
+    outlets = [humidityLbl, dewPointLbl, apparentTempLbl, tempLowLbl, tempHighLbl, rainChanceLbl, tomorrowTemp, tomorrowSummaryLbl, tomorrowChanceOfRainLbl]
     for outlet in outlets {
       outlet.text = ""
       outlet.textColor = .white
@@ -43,6 +44,7 @@ class WeatherInfoVC: UITableViewController {
     tomorrowTemp.text = "High of \(removeDecimals(from: forecast.daily.data[1].temperatureHigh))°"
     tomorrowIcon.image = UIImage(named: forecast.daily.data[1].icon)
     tomorrowSummaryLbl.text = "\(forecast.daily.data[1].summary)"
+    tomorrowChanceOfRainLbl.text = "Chance of rain: \(removeDecimals(from: forecast.daily.data[1].precipProbability*100))%"
   }
   
   // MARK: - Table view data source
@@ -56,7 +58,7 @@ class WeatherInfoVC: UITableViewController {
     case 0:
       return 6
     case 1:
-      return 2
+      return 3
     default:
       return 0
     }

@@ -45,7 +45,7 @@ struct Forecast: Codable {
       var time: Double
       var summary: String
       var icon: String
-      var precipProbability: Double?
+      var precipProbability: Double
       var precipType: String?
       var temperature: Double
       var apparentTemperature: Double
@@ -66,7 +66,7 @@ struct Forecast: Codable {
       var sunriseTime: Double
       var sunsetTime: Double
       var moonPhase: Double
-      var precipProbability: Double?
+      var precipProbability: Double
       var precipType: String?
       var temperatureHigh: Double
       var temperatureLow: Double
