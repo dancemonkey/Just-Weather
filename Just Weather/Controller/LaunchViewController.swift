@@ -15,6 +15,8 @@ class LaunchViewController: UIViewController, CLLocationManagerDelegate {
   @IBOutlet weak var tempLabel: UILabel!
   @IBOutlet weak var refreshBtn: UIBarButtonItem!
   @IBOutlet weak var summaryLbl: UILabel!
+  @IBOutlet weak var tempHighLbl: UILabel!
+  @IBOutlet weak var tempLowLbl: UILabel!
   
   var locManager: CLLocationManager!
   var fetcher: WeatherFetcher?
@@ -24,8 +26,14 @@ class LaunchViewController: UIViewController, CLLocationManagerDelegate {
     super.viewDidLoad()
     fetcher = WeatherFetcher()
     setupLocationManager()
-    tempLabel.text = ""
-    summaryLbl.text = ""
+    clearLabels()
+  }
+  
+  func clearLabels() {
+    tempLabel.text = "--"
+    summaryLbl.text = "--"
+    tempHighLbl.text = "--"
+    tempLowLbl.text = "--"
   }
   
   func setupLocationManager() {
@@ -38,6 +46,7 @@ class LaunchViewController: UIViewController, CLLocationManagerDelegate {
   }
   
   @IBAction func refreshWeather(sender: UIBarButtonItem) {
+    clearLabels()
     locManager.startUpdatingLocation()
   }
   
@@ -76,6 +85,8 @@ extension LaunchViewController {
         self.tempLabel.text = "\(self.temperatureFormat(from: forecast.currently.temperature))°"
         self.summaryLbl.text = forecast.currently.summary
         self.weatherInfoView?.setupForecastLabels(with: forecast)
+        self.tempHighLbl.text = "H: \(self.removeDecimals(from: forecast.daily.data[0].temperatureHigh))°"
+        self.tempLowLbl.text = "L: \(self.removeDecimals(from: forecast.daily.data[0].temperatureLow))°"
       }
     }
   }

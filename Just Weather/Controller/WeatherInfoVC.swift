@@ -14,21 +14,32 @@ class WeatherInfoVC: UITableViewController {
   @IBOutlet weak var humidityLbl: UILabel!
   @IBOutlet weak var dewPointLbl: UILabel!
   @IBOutlet weak var apparentTempLbl: UILabel!
-  @IBOutlet weak var tempHighLbl: UILabel!
-  @IBOutlet weak var tempLowLbl: UILabel!
   @IBOutlet weak var rainChanceLbl: UILabel!
-  @IBOutlet weak var tomorrowTemp: UILabel!
+  @IBOutlet weak var tomorrowHighTemp: UILabel!
+  @IBOutlet weak var tomorrowLowTemp: UILabel!
   @IBOutlet weak var tomorrowIcon: UIImageView!
   @IBOutlet weak var tomorrowSummaryLbl: UILabel!
   @IBOutlet weak var tomorrowChanceOfRainLbl: UILabel!
   var outlets: [UILabel] = [UILabel]()
   
+  enum cellIndexPath: Int {
+    case humidity = 0
+    case dewPoint
+    case apparentTemp
+    case chanceOfRain
+    case tomorrowHeader
+    case tomorrowWeather
+    case tomorrowSummary
+    case tomorrowChanceOfRain
+    case futureDisclosure
+  }
+  
   override func viewDidLoad() {
     super.viewDidLoad()
-    outlets = [humidityLbl, dewPointLbl, apparentTempLbl, tempLowLbl, tempHighLbl, rainChanceLbl, tomorrowTemp, tomorrowSummaryLbl, tomorrowChanceOfRainLbl]
+    outlets = [humidityLbl, dewPointLbl, apparentTempLbl, rainChanceLbl, tomorrowHighTemp, tomorrowLowTemp, tomorrowSummaryLbl, tomorrowChanceOfRainLbl]
     for outlet in outlets {
-      outlet.text = ""
-      outlet.textColor = .white
+      outlet.text = "--"
+      outlet.textColor = UIColor(named: "PrimaryText")
     }
   }
   
@@ -39,9 +50,8 @@ class WeatherInfoVC: UITableViewController {
     dewPointLbl.text = "\(removeDecimals(from: forecast.currently.dewPoint))°"
     apparentTempLbl.text = "\(removeDecimals(from: forecast.currently.apparentTemperature))°"
     rainChanceLbl.text = "\(removeDecimals(from: forecast.currently.precipProbability*100))%"
-    tempHighLbl.text = "\(removeDecimals(from: forecast.daily.data[0].temperatureHigh))°"
-    tempLowLbl.text = "\(removeDecimals(from: forecast.daily.data[0].temperatureLow))°"
-    tomorrowTemp.text = "High of \(removeDecimals(from: forecast.daily.data[1].temperatureHigh))°"
+    tomorrowHighTemp.text = "High of \(removeDecimals(from: forecast.daily.data[1].temperatureHigh))°"
+    tomorrowLowTemp.text = "Low of \(removeDecimals(from: forecast.daily.data[1].temperatureLow))°"
     tomorrowIcon.image = UIImage(named: forecast.daily.data[1].icon)
     tomorrowSummaryLbl.text = "\(forecast.daily.data[1].summary)"
     tomorrowChanceOfRainLbl.text = "Chance of rain: \(removeDecimals(from: forecast.daily.data[1].precipProbability*100))%"
@@ -50,24 +60,15 @@ class WeatherInfoVC: UITableViewController {
   // MARK: - Table view data source
   
   override func numberOfSections(in tableView: UITableView) -> Int {
-    return 2
+    return 1
   }
   
   override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    switch section {
-    case 0:
-      return 6
-    case 1:
-      return 3
-    default:
-      return 0
-    }
+    return 8
   }
 
 //  override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-//    let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
-//
-//    // Configure the cell...
+//    let cell = tableView.dequeueReusableCell(withIdentifier: "weatherInfo", for: indexPath)
 //
 //    return cell
 //  }
