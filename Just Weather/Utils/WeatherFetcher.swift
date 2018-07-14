@@ -32,7 +32,7 @@ class WeatherFetcher {
   // functions to fetch weather, different options, based on lat and long or user selected location
   
   let darkSkyURL = "https://api.darksky.net/forecast/"
-  let darkSkyKey = "e8cce189cf2466d799e75779bdf4fc37/"
+  let darkSkyKey = "\(DarkSkyKey().value)/"
   
   func getForecast(_ type: ForecastType, for location: (lat: Double, long: Double), completion: @escaping (Forecast) -> ()) {
     
@@ -53,11 +53,6 @@ class WeatherFetcher {
             let forecast = try JSONDecoder().decode(Forecast.self, from: jsonData)
             // need to handle different forecast types: daily, weekly, hourly, alerts only, etc.
             // will break up model to handle different forecast requests
-            for entry in forecast.hourly.data {
-              let hour = Date(timeIntervalSince1970: entry.time)
-              print(hour)
-              print(entry)
-            }
             completion(forecast)
           } catch {
             print(error)
