@@ -11,6 +11,7 @@ import UIKit
 class WeatherInfoVC: UITableViewController {
   
   var forecast: Forecast?
+  var hourlyForecast: Forecast.HourlyWeather?
   @IBOutlet weak var humidityLbl: UILabel!
   @IBOutlet weak var dewPointLbl: UILabel!
   @IBOutlet weak var apparentTempLbl: UILabel!
@@ -20,6 +21,7 @@ class WeatherInfoVC: UITableViewController {
   @IBOutlet weak var tomorrowIcon: UIImageView!
   @IBOutlet weak var tomorrowSummaryLbl: UILabel!
   @IBOutlet weak var tomorrowChanceOfRainLbl: UILabel!
+  @IBOutlet weak var hourlyForecastCollection: UICollectionView!
   var outlets: [UILabel] = [UILabel]()
   
   enum cellIndexPath: Int {
@@ -41,20 +43,23 @@ class WeatherInfoVC: UITableViewController {
       outlet.text = "--"
       outlet.textColor = UIColor(named: "PrimaryText")
     }
+    hourlyForecastCollection.delegate = self
+    hourlyForecastCollection.dataSource = self
   }
   
   // MARK: Helper Functions
   func setupForecastLabels(with forecast: Forecast) {
     self.forecast = forecast
-    humidityLbl.text = "\(removeDecimals(from: forecast.currently.humidity*100))%"
-    dewPointLbl.text = "\(removeDecimals(from: forecast.currently.dewPoint))°"
-    apparentTempLbl.text = "\(removeDecimals(from: forecast.currently.apparentTemperature))°"
-    rainChanceLbl.text = "\(removeDecimals(from: forecast.currently.precipProbability*100))%"
-    tomorrowHighTemp.text = "High of \(removeDecimals(from: forecast.daily.data[1].temperatureHigh))°"
-    tomorrowLowTemp.text = "Low of \(removeDecimals(from: forecast.daily.data[1].temperatureLow))°"
+    self.hourlyForecast = forecast.hourly
+    humidityLbl.text = "\(Numbers().removeDecimals(from: forecast.currently.humidity*100))%"
+    dewPointLbl.text = "\(Numbers().removeDecimals(from: forecast.currently.dewPoint))°"
+    apparentTempLbl.text = "\(Numbers().removeDecimals(from: forecast.currently.apparentTemperature))°"
+    rainChanceLbl.text = "\(Numbers().removeDecimals(from: forecast.currently.precipProbability*100))%"
+    tomorrowHighTemp.text = "High of \(Numbers().removeDecimals(from: forecast.daily.data[1].temperatureHigh))°"
+    tomorrowLowTemp.text = "Low of \(Numbers().removeDecimals(from: forecast.daily.data[1].temperatureLow))°"
     tomorrowIcon.image = UIImage(named: forecast.daily.data[1].icon)
     tomorrowSummaryLbl.text = "\(forecast.daily.data[1].summary)"
-    tomorrowChanceOfRainLbl.text = "Chance of rain: \(removeDecimals(from: forecast.daily.data[1].precipProbability*100))%"
+    tomorrowChanceOfRainLbl.text = "Chance of rain: \(Numbers().removeDecimals(from: forecast.daily.data[1].precipProbability*100))%"
   }
   
   // MARK: - Table view data source
@@ -64,58 +69,32 @@ class WeatherInfoVC: UITableViewController {
   }
   
   override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    return 8
+    return 9
   }
+}
 
-//  override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-//    let cell = tableView.dequeueReusableCell(withIdentifier: "weatherInfo", for: indexPath)
-//
-//    return cell
-//  }
-
-    /*
-    // Override to support conditional editing of the table view.
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
+extension WeatherInfoVC: UICollectionViewDataSource, UICollectionViewDelegate {
+  
+  func numberOfSections(in collectionView: UICollectionView) -> Int {
+    return 1
+  }
+  
+  func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    let cell = hourlyForecastCollection.dequeueReusableCell(withReuseIdentifier: "hourlyCell", for: indexPath) as! HourlyItemCell
+    if let hourlyData = self.hourlyForecast?.data {
+      cell.configure(from: hourlyData[indexPath.row])
+      if indexPath.row == 0 {
+        cell.timeLbl.text = "Now"
+      }
+    } else {
+      cell.configureWaiting()
     }
-    */
-
-    /*
-    // Override to support editing the table view.
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            // Delete the row from the data source
-            tableView.deleteRows(at: [indexPath], with: .fade)
-        } else if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
-    }
-    */
-
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-
-    }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }
-    */
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
+    
+    return cell
+  }
+  
+  func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    return 12
+  }
+  
 }

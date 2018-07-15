@@ -82,11 +82,12 @@ extension LaunchViewController {
         
         // populate view objects in the closure
         self.weatherIcon.image = UIImage(named: forecast.currently.icon)
-        self.tempLabel.text = "\(self.temperatureFormat(from: forecast.currently.temperature))°"
+        self.tempLabel.text = "\(Numbers().temperatureFormat(from: forecast.currently.temperature))°"
         self.summaryLbl.text = forecast.currently.summary
         self.weatherInfoView?.setupForecastLabels(with: forecast)
-        self.tempHighLbl.text = "H: \(self.removeDecimals(from: forecast.daily.data[0].temperatureHigh))°"
-        self.tempLowLbl.text = "L: \(self.removeDecimals(from: forecast.daily.data[0].temperatureLow))°"
+        self.weatherInfoView?.hourlyForecastCollection.reloadData()
+        self.tempHighLbl.text = "H: \(Numbers().removeDecimals(from: forecast.daily.data[0].temperatureHigh))°"
+        self.tempLowLbl.text = "L: \(Numbers().removeDecimals(from: forecast.daily.data[0].temperatureLow))°"
       }
     }
   }
