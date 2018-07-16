@@ -23,6 +23,8 @@ class WeatherInfoVC: UITableViewController {
   @IBOutlet weak var tomorrowChanceOfRainLbl: UILabel!
   @IBOutlet weak var hourlyForecastCollection: UICollectionView!
   var outlets: [UILabel] = [UILabel]()
+  weak var segueDelegate: SegueHandler?
+  let dailyForecastSelectableRow = 6
   
   enum cellIndexPath: Int {
     case humidity = 0
@@ -59,7 +61,7 @@ class WeatherInfoVC: UITableViewController {
     tomorrowLowTemp.text = "Low of \(Numbers().removeDecimals(from: forecast.daily.data[1].temperatureLow))°"
     tomorrowIcon.image = UIImage(named: forecast.daily.data[1].icon)
     tomorrowSummaryLbl.text = "\(forecast.daily.data[1].summary)"
-    tomorrowChanceOfRainLbl.text = "Chance of rain: \(Numbers().removeDecimals(from: forecast.daily.data[1].precipProbability*100))%"
+    tomorrowChanceOfRainLbl.text = "Chance of precipitation: \(Numbers().removeDecimals(from: forecast.daily.data[1].precipProbability*100))%"
   }
   
   // MARK: - Table view data source
@@ -70,6 +72,12 @@ class WeatherInfoVC: UITableViewController {
   
   override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
     return 9
+  }
+  
+  override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    if indexPath.row == dailyForecastSelectableRow {
+      segueDelegate?.segueTo(identifier: "showWeeklyForecast")
+    }
   }
 }
 

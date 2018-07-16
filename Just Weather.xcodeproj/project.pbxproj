@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		100AEC2320F65CC100411F69 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 100AEC2220F65CC100411F69 /* Extensions.swift */; };
 		100F135420F4FCD500B40E1D /* WeatherInfoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 100F135320F4FCD500B40E1D /* WeatherInfoVC.swift */; };
+		1093C84A20FC42D500CFA3E3 /* WeeklyForecastVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1093C84920FC42D500CFA3E3 /* WeeklyForecastVC.swift */; };
+		1093C84C20FC436B00CFA3E3 /* DailyForecastCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1093C84B20FC436B00CFA3E3 /* DailyForecastCell.swift */; };
+		1093C84E20FC456200CFA3E3 /* SegueProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1093C84D20FC456200CFA3E3 /* SegueProtocol.swift */; };
 		10AA683320F1548D00201F4C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10AA683220F1548D00201F4C /* AppDelegate.swift */; };
 		10AA683520F1548D00201F4C /* LaunchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10AA683420F1548D00201F4C /* LaunchViewController.swift */; };
 		10AA683820F1548D00201F4C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 10AA683620F1548D00201F4C /* Main.storyboard */; };
@@ -24,6 +27,9 @@
 /* Begin PBXFileReference section */
 		100AEC2220F65CC100411F69 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		100F135320F4FCD500B40E1D /* WeatherInfoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherInfoVC.swift; sourceTree = "<group>"; };
+		1093C84920FC42D500CFA3E3 /* WeeklyForecastVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeeklyForecastVC.swift; sourceTree = "<group>"; };
+		1093C84B20FC436B00CFA3E3 /* DailyForecastCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyForecastCell.swift; sourceTree = "<group>"; };
+		1093C84D20FC456200CFA3E3 /* SegueProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegueProtocol.swift; sourceTree = "<group>"; };
 		10AA682F20F1548D00201F4C /* Just Weather.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Just Weather.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		10AA683220F1548D00201F4C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		10AA683420F1548D00201F4C /* LaunchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchViewController.swift; sourceTree = "<group>"; };
@@ -86,6 +92,7 @@
 			children = (
 				10AA683420F1548D00201F4C /* LaunchViewController.swift */,
 				100F135320F4FCD500B40E1D /* WeatherInfoVC.swift */,
+				1093C84920FC42D500CFA3E3 /* WeeklyForecastVC.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -95,6 +102,7 @@
 			children = (
 				10C8F30020FB82A800CD272C /* HourlyForecastCell.swift */,
 				10C8F30220FB834000CD272C /* HourlyItemCell.swift */,
+				1093C84B20FC436B00CFA3E3 /* DailyForecastCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -113,6 +121,7 @@
 				10AA684820F154CC00201F4C /* WeatherFetcher.swift */,
 				100AEC2220F65CC100411F69 /* Extensions.swift */,
 				10F805C320FA30CE00B17B54 /* APIKey.swift */,
+				1093C84D20FC456200CFA3E3 /* SegueProtocol.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -190,9 +199,12 @@
 			files = (
 				10E388C720F394FA003A8E66 /* Forecast.swift in Sources */,
 				10F805C420FA30CF00B17B54 /* APIKey.swift in Sources */,
+				1093C84A20FC42D500CFA3E3 /* WeeklyForecastVC.swift in Sources */,
 				100AEC2320F65CC100411F69 /* Extensions.swift in Sources */,
 				100F135420F4FCD500B40E1D /* WeatherInfoVC.swift in Sources */,
+				1093C84E20FC456200CFA3E3 /* SegueProtocol.swift in Sources */,
 				10AA683520F1548D00201F4C /* LaunchViewController.swift in Sources */,
+				1093C84C20FC436B00CFA3E3 /* DailyForecastCell.swift in Sources */,
 				10C8F30320FB834000CD272C /* HourlyItemCell.swift in Sources */,
 				10C8F30120FB82A800CD272C /* HourlyForecastCell.swift in Sources */,
 				10AA683320F1548D00201F4C /* AppDelegate.swift in Sources */,

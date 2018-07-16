@@ -17,23 +17,37 @@ class LaunchViewController: UIViewController, CLLocationManagerDelegate {
   @IBOutlet weak var summaryLbl: UILabel!
   @IBOutlet weak var tempHighLbl: UILabel!
   @IBOutlet weak var tempLowLbl: UILabel!
+  @IBOutlet weak var alertItem: UIBarButtonItem!
   
   var locManager: CLLocationManager!
   var fetcher: WeatherFetcher?
   var weatherInfoView: WeatherInfoVC?
+  var forecast: Forecast?
   
   override func viewDidLoad() {
     super.viewDidLoad()
     fetcher = WeatherFetcher()
     setupLocationManager()
     clearLabels()
+    weatherInfoView?.segueDelegate = self
   }
   
   func clearLabels() {
-    tempLabel.text = "--"
+    tempLabel.text = "--°"
     summaryLbl.text = "--"
-    tempHighLbl.text = "--"
-    tempLowLbl.text = "--"
+    tempHighLbl.text = "--°"
+    tempLowLbl.text = "--°"
+    hideAlert()
+  }
+  
+  func hideAlert() {
+    alertItem.tintColor = .clear
+    alertItem.isEnabled = false
+  }
+  
+  func showAlert() {
+    alertItem.tintColor = .red
+    alertItem.isEnabled = true
   }
   
   func setupLocationManager() {
@@ -50,12 +64,25 @@ class LaunchViewController: UIViewController, CLLocationManagerDelegate {
     locManager.startUpdatingLocation()
   }
   
+  @IBAction func alertPressed(sender: UIBarButtonItem) {
+    // show alert info screen or something
+  }
+  
   override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
     if segue.identifier == "showWeatherInfo" {
       weatherInfoView = segue.destination as? WeatherInfoVC
+    } else if segue.identifier == "showWeeklyForecast" {
+      let destVC = segue.destination as! WeeklyForecastVC
+      destVC.dailyForecast = self.forecast?.daily
     }
   }
   
+}
+
+extension LaunchViewController: SegueHandler {
+  func segueTo(identifier: String) {
+    self.performSegue(withIdentifier: identifier, sender: self)
+  }
 }
 
 extension LaunchViewController {
@@ -75,10 +102,11 @@ extension LaunchViewController {
     
     // do weather stuff with lat and long
     if let fetcher = self.fetcher {
-      fetcher.getForecast(.all, for: (lat: userLocation.coordinate.latitude, long: userLocation.coordinate.longitude)) {forecast in
+      fetcher.getForecast(.all, for: (lat: userLocation.coordinate.latitude, long: userLocation.coordinate.longitude)) { forecast in
         
-        // stop updating location in the closure, until "refresh" is hit
+        // stop updating location in the closure until "refresh" is hit, set forecast property
         self.locManager.stopUpdatingLocation()
+        self.forecast = forecast
         
         // populate view objects in the closure
         self.weatherIcon.image = UIImage(named: forecast.currently.icon)
@@ -88,6 +116,11 @@ extension LaunchViewController {
         self.weatherInfoView?.hourlyForecastCollection.reloadData()
         self.tempHighLbl.text = "H: \(Numbers().removeDecimals(from: forecast.daily.data[0].temperatureHigh))°"
         self.tempLowLbl.text = "L: \(Numbers().removeDecimals(from: forecast.daily.data[0].temperatureLow))°"
+        
+        // alerts
+        if let _ = forecast.alerts {
+          self.showAlert()
+        }
       }
     }
   }

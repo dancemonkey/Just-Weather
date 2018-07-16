@@ -19,8 +19,8 @@ class HourlyItemCell: UICollectionViewCell {
     timeLbl.text = getHour(from: forecastData.time)
     weatherIcon.image = UIImage(named: forecastData.icon)
     temperatureLbl.text = Numbers().temperatureFormat(from: forecastData.temperature) + "°"
-    if forecastData.precipProbability >= 1.0 {
-      chanceOfRainLbl.text = Numbers().removeDecimals(from: forecastData.precipProbability) + "%"
+    if forecastData.precipProbability >= 0.05 {
+      chanceOfRainLbl.text = Numbers().removeDecimals(from: forecastData.precipProbability*100) + "%"
     } else {
       chanceOfRainLbl.text = ""
     }
