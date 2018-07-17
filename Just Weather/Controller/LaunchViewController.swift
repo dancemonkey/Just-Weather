@@ -23,16 +23,23 @@ class LaunchViewController: UIViewController, CLLocationManagerDelegate {
   var fetcher: WeatherFetcher?
   var weatherInfoView: WeatherInfoVC?
   var forecast: Forecast?
+  var settings: SettingsStore?
   
   override func viewDidLoad() {
     super.viewDidLoad()
+    
+    self.settings = SettingsStore()
+    settings?.saveLastOpen()
+    
     fetcher = WeatherFetcher()
     setupLocationManager()
     clearLabels()
     weatherInfoView?.segueDelegate = self
+    
+    NotificationCenter.default.addObserver(self, selector: #selector(autoRefreshForecast), name: .UIApplicationDidBecomeActive, object: nil)
   }
   
-  func clearLabels() {
+  @objc func clearLabels() {
     tempLabel.text = "--°"
     summaryLbl.text = "--"
     tempHighLbl.text = "--°"
@@ -59,6 +66,14 @@ class LaunchViewController: UIViewController, CLLocationManagerDelegate {
     }
   }
   
+  @objc func autoRefreshForecast() {
+    guard let timeSinceOpen = settings?.timeSinceLastOpen() else { return }
+    if timeSinceOpen >= 5 {
+      self.refreshWeather(sender: self.refreshBtn)
+      self.settings?.saveLastOpen()
+    }
+  }
+  
   @IBAction func refreshWeather(sender: UIBarButtonItem) {
     clearLabels()
     locManager.startUpdatingLocation()
@@ -76,7 +91,6 @@ class LaunchViewController: UIViewController, CLLocationManagerDelegate {
       destVC.dailyForecast = self.forecast?.daily
     }
   }
-  
 }
 
 extension LaunchViewController: SegueHandler {

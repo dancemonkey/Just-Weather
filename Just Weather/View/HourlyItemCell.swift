@@ -22,7 +22,7 @@ class HourlyItemCell: UICollectionViewCell {
     if forecastData.precipProbability >= 0.05 {
       chanceOfRainLbl.text = Numbers().removeDecimals(from: forecastData.precipProbability*100) + "%"
     } else {
-      chanceOfRainLbl.text = ""
+      chanceOfRainLbl.text = " "
     }
   }
   
