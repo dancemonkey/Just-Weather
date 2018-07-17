@@ -18,6 +18,7 @@ class LaunchViewController: UIViewController, CLLocationManagerDelegate {
   @IBOutlet weak var tempHighLbl: UILabel!
   @IBOutlet weak var tempLowLbl: UILabel!
   @IBOutlet weak var alertItem: UIBarButtonItem!
+  @IBOutlet weak var locationBtn: UIBarButtonItem!
   
   var locManager: CLLocationManager!
   var fetcher: WeatherFetcher?
@@ -52,7 +53,7 @@ class LaunchViewController: UIViewController, CLLocationManagerDelegate {
     alertItem.isEnabled = false
   }
   
-  func showAlert() {
+  func showAlertIndicator() {
     alertItem.tintColor = .red
     alertItem.isEnabled = true
   }
@@ -83,6 +84,12 @@ class LaunchViewController: UIViewController, CLLocationManagerDelegate {
     // show alert info screen or something
   }
   
+  @IBAction func selectLocation(sender: UIBarButtonItem) {
+    // popup to enter ZIP for manual forecast selection
+    // popup sets this VC as delegate for callback
+    print("showing you a popup to select your forecast")
+  }
+  
   override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
     if segue.identifier == "showWeatherInfo" {
       weatherInfoView = segue.destination as? WeatherInfoVC
@@ -96,6 +103,14 @@ class LaunchViewController: UIViewController, CLLocationManagerDelegate {
 extension LaunchViewController: SegueHandler {
   func segueTo(identifier: String) {
     self.performSegue(withIdentifier: identifier, sender: self)
+  }
+}
+
+extension LaunchViewController: ZipCodeHandler {
+  func setForecastZip(_ zip: Int) {
+    // need to some get lat and long to feed dark sky request
+    // need to add zip request to fetcher
+    // move UI update code into separate function
   }
 }
 
@@ -133,7 +148,7 @@ extension LaunchViewController {
         
         // alerts
         if let _ = forecast.alerts {
-          self.showAlert()
+          self.showAlertIndicator()
         }
       }
     }
