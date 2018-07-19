@@ -107,9 +107,9 @@ extension LaunchViewController: SegueHandler {
 }
 
 extension LaunchViewController: ZipCodeHandler {
-  func setForecastZip(_ zip: Int) {
+  func setForecastLocation(for zip: Int) {
     // need to some get lat and long to feed dark sky request
-    // need to add zip request to fetcher
+    // fetch forecast based on lat/long from ZIP
     // move UI update code into separate function
   }
 }

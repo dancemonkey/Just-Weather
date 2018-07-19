@@ -9,5 +9,5 @@
 import UIKit
 
 protocol ZipCodeHandler {
-  func setForecastZip(_ zip: Int)
+  func setForecastLocation(for zip: Int)
 }
