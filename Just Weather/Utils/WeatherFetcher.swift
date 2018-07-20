@@ -35,14 +35,13 @@ class WeatherFetcher {
   let darkSkyURL = "https://api.darksky.net/forecast/"
   let darkSkyKey = "\(DarkSkyKey().value)/"
   
-  func getLocation(for location: String, completion: () -> ()) {
-    // handle errors from geoCoder if location not found
-  
+  func getLocation(for location: String?, completion: @escaping ([CLPlacemark]?) -> ()) {
+    guard let loc = location else { return }
     let geoCoder = CLGeocoder()
-    geoCoder.geocodeAddressString(location) { (placemarks, error) in
+    geoCoder.geocodeAddressString(loc) { (placemarks, error) in
       if let marks = placemarks {
-        // use marks[0] to save location in pick list and defaults
-        // call completion
+        print(marks)
+        completion(marks)
       }
     }
   }
