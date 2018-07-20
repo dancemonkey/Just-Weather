@@ -157,7 +157,7 @@
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
-                            <searchBar contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="w0O-nz-NQY">
+                            <searchBar contentMode="redraw" placeholder="Search by address or postal code" translatesAutoresizingMaskIntoConstraints="NO" id="w0O-nz-NQY">
                                 <rect key="frame" x="0.0" y="116" width="375" height="56"/>
                                 <textInputTraits key="textInputTraits"/>
                             </searchBar>

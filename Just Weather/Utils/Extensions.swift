@@ -31,27 +31,3 @@ class Numbers {
     return formatter.string(from: NSNumber(value: double))!
   }
 }
-
-//extension UIViewController {
-//  func temperatureFormat(from temperature: Double) -> String {
-//    let formatter = NumberFormatter()
-//    formatter.usesGroupingSeparator = false
-//    formatter.numberStyle = .decimal
-//    formatter.minimumFractionDigits = 0
-//    formatter.maximumFractionDigits = 0
-//    formatter.locale = Locale.current
-//    
-//    return formatter.string(from: NSNumber(value: temperature))!
-//  }
-//  
-//  func removeDecimals(from double: Double) -> String {
-//    let formatter = NumberFormatter()
-//    formatter.usesGroupingSeparator = false
-//    formatter.numberStyle = .decimal
-//    formatter.minimumFractionDigits = 0
-//    formatter.maximumFractionDigits = 0
-//    formatter.locale = Locale.current
-//    
-//    return formatter.string(from: NSNumber(value: double))!
-//  }
-//}

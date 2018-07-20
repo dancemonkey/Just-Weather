@@ -63,8 +63,6 @@ class WeatherFetcher {
         } else if let jsonData = responseData {
           do {
             let forecast = try JSONDecoder().decode(Forecast.self, from: jsonData)
-            // need to handle different forecast types: daily, weekly, hourly, alerts only, etc.
-            // will break up model to handle different forecast requests
             completion(forecast)
           } catch {
             print(error)

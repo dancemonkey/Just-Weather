@@ -24,7 +24,6 @@ class LocationSearchVC: UIViewController, UITableViewDelegate, UITableViewDataSo
     self.tableView.dataSource = self
     self.tableView.delegate = self
     self.searchBar.delegate = self
-    
   }
   
   // MARK: Tableview functions
@@ -63,7 +62,8 @@ class LocationSearchVC: UIViewController, UITableViewDelegate, UITableViewDataSo
       self.navigationController?.popViewController(animated: true)
       return
     }
-    // run forecast for location in table row tapped
+    zipHandlerDelegate?.setForecastLocation(for: results[indexPath.row-1])
+    self.navigationController?.popViewController(animated: true)
   }
   
   // MARK: Searchbar functions

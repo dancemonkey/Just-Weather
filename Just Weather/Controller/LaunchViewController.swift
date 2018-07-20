@@ -67,6 +67,31 @@ class LaunchViewController: UIViewController, CLLocationManagerDelegate {
     }
   }
   
+  func updateUIWith(forecast: Forecast) {
+    // check for saved location in uerdefaults
+    if let loc = settings?.getSavedForecastCity() {
+      self.title = loc
+    }
+    
+    // stop updating location in the closure until "refresh" is hit, set forecast property
+    self.locManager.stopUpdatingLocation()
+    self.forecast = forecast
+    
+    // populate view objects in the closure
+    self.weatherIcon.image = UIImage(named: forecast.currently.icon)
+    self.tempLabel.text = "\(Numbers().temperatureFormat(from: forecast.currently.temperature))°"
+    self.summaryLbl.text = forecast.currently.summary
+    self.weatherInfoView?.setupForecastLabels(with: forecast)
+    self.weatherInfoView?.hourlyForecastCollection.reloadData()
+    self.tempHighLbl.text = "H: \(Numbers().removeDecimals(from: forecast.daily.data[0].temperatureHigh))°"
+    self.tempLowLbl.text = "L: \(Numbers().removeDecimals(from: forecast.daily.data[0].temperatureLow))°"
+    
+    // alerts
+    if let _ = forecast.alerts {
+      self.showAlertIndicator()
+    }
+  }
+  
   @objc func autoRefreshForecast() {
     guard let timeSinceOpen = settings?.timeSinceLastOpen() else { return }
     if timeSinceOpen >= 5 {
@@ -85,8 +110,6 @@ class LaunchViewController: UIViewController, CLLocationManagerDelegate {
   }
   
   @IBAction func selectLocation(sender: UIBarButtonItem) {
-    // popup to enter ZIP for manual forecast selection
-    // popup sets this VC as delegate for callback
     self.performSegue(withIdentifier: "showLocationSearch", sender: self)
   }
   
@@ -112,14 +135,18 @@ extension LaunchViewController: SegueHandler {
 
 extension LaunchViewController: ZipCodeHandler {
   func setForecastLocation(for location: CLPlacemark) {
-    print("setting forecast location from search and loading new forecast")
-    // need to some get lat and long to feed dark sky request
-    // fetch forecast based on lat/long from ZIP
-    // move UI update code into separate function
+    guard let loc = location.location else { return }
+    let forecastLoc: (lat: Double, long: Double) = (loc.coordinate.latitude, loc.coordinate.longitude)
+    self.settings?.saveForecastLocation(to: location)
+    self.fetcher?.getForecast(.all, for: forecastLoc, completion: { (forecast) in
+      self.updateUIWith(forecast: forecast)
+    })
   }
   
   func setForecastForCurrentLocation() {
     self.locManager.startUpdatingLocation()
+    settings?.clearForecastLocation()
+    self.title = "Current Location"
   }
 }
 
@@ -138,26 +165,14 @@ extension LaunchViewController {
   func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
     let userLocation: CLLocation = locations[0] as CLLocation
     
-    // do weather stuff with lat and long
     if let fetcher = self.fetcher {
-      fetcher.getForecast(.all, for: (lat: userLocation.coordinate.latitude, long: userLocation.coordinate.longitude)) { forecast in
-        
-        // stop updating location in the closure until "refresh" is hit, set forecast property
-        self.locManager.stopUpdatingLocation()
-        self.forecast = forecast
-        
-        // populate view objects in the closure
-        self.weatherIcon.image = UIImage(named: forecast.currently.icon)
-        self.tempLabel.text = "\(Numbers().temperatureFormat(from: forecast.currently.temperature))°"
-        self.summaryLbl.text = forecast.currently.summary
-        self.weatherInfoView?.setupForecastLabels(with: forecast)
-        self.weatherInfoView?.hourlyForecastCollection.reloadData()
-        self.tempHighLbl.text = "H: \(Numbers().removeDecimals(from: forecast.daily.data[0].temperatureHigh))°"
-        self.tempLowLbl.text = "L: \(Numbers().removeDecimals(from: forecast.daily.data[0].temperatureLow))°"
-        
-        // alerts
-        if let _ = forecast.alerts {
-          self.showAlertIndicator()
+      if let coord = settings?.getSavedForecastCoordinates() {
+        fetcher.getForecast(.all, for: coord, completion: { (forecast) in
+          self.updateUIWith(forecast: forecast)
+        })
+      } else {
+        fetcher.getForecast(.all, for: (lat: userLocation.coordinate.latitude, long: userLocation.coordinate.longitude)) { forecast in
+          self.updateUIWith(forecast: forecast)
         }
       }
     }
