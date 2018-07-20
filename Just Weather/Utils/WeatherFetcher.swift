@@ -35,13 +35,11 @@ class WeatherFetcher {
   let darkSkyURL = "https://api.darksky.net/forecast/"
   let darkSkyKey = "\(DarkSkyKey().value)/"
   
-  func getLocation(for zip: Int, completion: () -> ()) {
-    // verify zip code on entry
-    // verify zip before casting to String for geoCoder
+  func getLocation(for location: String, completion: () -> ()) {
     // handle errors from geoCoder if location not found
   
     let geoCoder = CLGeocoder()
-    geoCoder.geocodeAddressString(String(zip)) { (placemarks, error) in
+    geoCoder.geocodeAddressString(location) { (placemarks, error) in
       if let marks = placemarks {
         // use marks[0] to save location in pick list and defaults
         // call completion

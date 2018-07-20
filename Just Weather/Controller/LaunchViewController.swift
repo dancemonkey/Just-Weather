@@ -87,7 +87,7 @@ class LaunchViewController: UIViewController, CLLocationManagerDelegate {
   @IBAction func selectLocation(sender: UIBarButtonItem) {
     // popup to enter ZIP for manual forecast selection
     // popup sets this VC as delegate for callback
-    print("showing you a popup to select your forecast")
+    self.performSegue(withIdentifier: "showLocationSearch", sender: self)
   }
   
   override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -96,6 +96,10 @@ class LaunchViewController: UIViewController, CLLocationManagerDelegate {
     } else if segue.identifier == "showWeeklyForecast" {
       let destVC = segue.destination as! WeeklyForecastVC
       destVC.dailyForecast = self.forecast?.daily
+    } else if segue.identifier == "showLocationSearch" {
+      let destVC = segue.destination as! LocationSearchVC
+      destVC.zipHandlerDelegate = self
+      destVC.fetcher = self.fetcher
     }
   }
 }
@@ -107,10 +111,15 @@ extension LaunchViewController: SegueHandler {
 }
 
 extension LaunchViewController: ZipCodeHandler {
-  func setForecastLocation(for zip: Int) {
+  func setForecastLocation(for location: CLPlacemark) {
+    print("setting forecast location from search and loading new forecast")
     // need to some get lat and long to feed dark sky request
     // fetch forecast based on lat/long from ZIP
     // move UI update code into separate function
+  }
+  
+  func setForecastForCurrentLocation() {
+    self.locManager.startUpdatingLocation()
   }
 }
 

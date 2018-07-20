@@ -7,7 +7,9 @@
 //
 
 import UIKit
+import CoreLocation
 
 protocol ZipCodeHandler {
-  func setForecastLocation(for zip: Int)
+  func setForecastLocation(for location: CLPlacemark)
+  func setForecastForCurrentLocation()
 }
