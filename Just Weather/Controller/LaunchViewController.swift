@@ -144,9 +144,8 @@ extension LaunchViewController: ZipCodeHandler {
   }
   
   func setForecastForCurrentLocation() {
-    self.locManager.startUpdatingLocation()
     settings?.clearForecastLocation()
-    self.title = "Current Location"
+    self.locManager.startUpdatingLocation()
   }
 }
 
@@ -168,11 +167,14 @@ extension LaunchViewController {
     if let fetcher = self.fetcher {
       if let coord = settings?.getSavedForecastCoordinates() {
         fetcher.getForecast(.all, for: coord, completion: { (forecast) in
+          print("getting from settings")
           self.updateUIWith(forecast: forecast)
         })
       } else {
         fetcher.getForecast(.all, for: (lat: userLocation.coordinate.latitude, long: userLocation.coordinate.longitude)) { forecast in
+          print("getting fresh forecast")
           self.updateUIWith(forecast: forecast)
+          self.settings?.saveForecastLocation(to: userLocation)
         }
       }
     }

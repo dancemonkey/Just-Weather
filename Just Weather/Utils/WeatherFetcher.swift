@@ -40,7 +40,6 @@ class WeatherFetcher {
     let geoCoder = CLGeocoder()
     geoCoder.geocodeAddressString(loc) { (placemarks, error) in
       if let marks = placemarks {
-        print(marks)
         completion(marks)
       }
     }

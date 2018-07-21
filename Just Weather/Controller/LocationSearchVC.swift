@@ -57,12 +57,12 @@ class LocationSearchVC: UIViewController, UITableViewDelegate, UITableViewDataSo
   }
   
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-    guard let results = self.searchResults else {
+    if indexPath.row == 0 {
       zipHandlerDelegate?.setForecastForCurrentLocation()
-      self.navigationController?.popViewController(animated: true)
-      return
+    } else {
+      guard let results = self.searchResults else { return }
+      zipHandlerDelegate?.setForecastLocation(for: results[indexPath.row-1])
     }
-    zipHandlerDelegate?.setForecastLocation(for: results[indexPath.row-1])
     self.navigationController?.popViewController(animated: true)
   }
   
