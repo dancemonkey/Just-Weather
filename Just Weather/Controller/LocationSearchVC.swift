@@ -16,8 +16,8 @@ class LocationSearchVC: UIViewController, UITableViewDelegate, UITableViewDataSo
   
   // optional string for now, eventually need custom model result?
   var searchResults: [CLPlacemark]?
-  var zipHandlerDelegate: ZipCodeHandler?
   var fetcher: WeatherFetcher?
+  weak var storageUpdateDelegate: LocationStorageUpdateProtocol?
   
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -33,36 +33,29 @@ class LocationSearchVC: UIViewController, UITableViewDelegate, UITableViewDataSo
   }
   
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    guard let results = self.searchResults else { return 1 }
-    return results.count + 1
+    guard let results = self.searchResults else { return 0 }
+    return results.count
   }
   
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     let cell = tableView.dequeueReusableCell(withIdentifier: "locationCell")!
-    if indexPath.row == 0 {
-      cell.textLabel?.text = "Current Location"
-      cell.imageView?.image = UIImage(named: "pin")
-      return cell
-    } else {
-      guard let results = searchResults else {
-        cell.textLabel?.text = "No Result Found"
-        return cell
-      }
-      let result = results[indexPath.row - 1]
-      let locationResult: (city: String, state: String, zip: String) = (result.locality ?? "", result.administrativeArea ?? "", result.postalCode ?? "")
-      cell.textLabel?.text = "\(locationResult.city) \(locationResult.state) \(locationResult.zip)"
-      cell.imageView?.image = nil
+    guard let results = searchResults else {
+      cell.textLabel?.text = "No Result Found"
       return cell
     }
+    let result = results[indexPath.row]
+    let locationResult: (city: String, state: String, zip: String) = (result.locality ?? "", result.administrativeArea ?? "", result.postalCode ?? "")
+    cell.textLabel?.text = "\(locationResult.city) \(locationResult.state) \(locationResult.zip)"
+    cell.imageView?.image = nil
+    return cell
   }
   
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-    if indexPath.row == 0 {
-      zipHandlerDelegate?.setForecastForCurrentLocation()
-    } else {
-      guard let results = self.searchResults else { return }
-      zipHandlerDelegate?.setForecastLocation(for: results[indexPath.row-1])
-    }
+    // store selected row then tap another button to save and go back to prior screen
+    guard let results = self.searchResults else { return }
+    let store = SettingsStore()
+    store.saveForecastLocation(as: results[indexPath.row])
+    storageUpdateDelegate?.updateLocations()
     self.navigationController?.popViewController(animated: true)
   }
   

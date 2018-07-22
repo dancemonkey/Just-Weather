@@ -9,7 +9,11 @@
 import UIKit
 import CoreLocation
 
-protocol ZipCodeHandler {
+protocol ForecastLocationSetProtocol: class {
   func setForecastLocation(for location: CLPlacemark)
   func setForecastForCurrentLocation()
+}
+
+protocol LocationStorageUpdateProtocol: class {
+  func updateLocations()
 }

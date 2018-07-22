@@ -25,6 +25,7 @@ class LaunchViewController: UIViewController, CLLocationManagerDelegate {
   var weatherInfoView: WeatherInfoVC?
   var forecast: Forecast?
   var settings: SettingsStore?
+  var currentLocation: Bool = true
   
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -68,14 +69,23 @@ class LaunchViewController: UIViewController, CLLocationManagerDelegate {
   }
   
   func updateUIWith(forecast: Forecast) {
-    // check for saved location in uerdefaults
-    if let loc = settings?.getSavedForecastCity() {
-      self.title = loc
-    }
     
     // stop updating location in the closure until "refresh" is hit, set forecast property
     self.locManager.stopUpdatingLocation()
     self.forecast = forecast
+    
+    // check for saved location in userdefaults
+    if currentLocation {
+      let geoCoder = CLGeocoder()
+      geoCoder.reverseGeocodeLocation(CLLocation(latitude: forecast.latitude, longitude: forecast.longitude)) { (placemarks, error) in
+        if let marks = placemarks {
+          self.title = marks[0].locality
+        }
+      }
+    } else if let city = settings?.getSavedForecastCity() {
+      self.title = city
+    }
+ 
     
     // populate view objects in the closure
     self.weatherIcon.image = UIImage(named: forecast.currently.icon)
@@ -110,7 +120,7 @@ class LaunchViewController: UIViewController, CLLocationManagerDelegate {
   }
   
   @IBAction func selectLocation(sender: UIBarButtonItem) {
-    self.performSegue(withIdentifier: "showLocationSearch", sender: self)
+    self.performSegue(withIdentifier: "showLocationSelect", sender: self)
   }
   
   override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -119,9 +129,9 @@ class LaunchViewController: UIViewController, CLLocationManagerDelegate {
     } else if segue.identifier == "showWeeklyForecast" {
       let destVC = segue.destination as! WeeklyForecastVC
       destVC.dailyForecast = self.forecast?.daily
-    } else if segue.identifier == "showLocationSearch" {
-      let destVC = segue.destination as! LocationSearchVC
-      destVC.zipHandlerDelegate = self
+    } else if segue.identifier == "showLocationSelect" {
+      let destVC = segue.destination as! LocationSelectVC
+      destVC.forecastLocationDelegate = self
       destVC.fetcher = self.fetcher
     }
   }
@@ -133,18 +143,19 @@ extension LaunchViewController: SegueHandler {
   }
 }
 
-extension LaunchViewController: ZipCodeHandler {
+extension LaunchViewController: ForecastLocationSetProtocol {
   func setForecastLocation(for location: CLPlacemark) {
     guard let loc = location.location else { return }
+    currentLocation = false
     let forecastLoc: (lat: Double, long: Double) = (loc.coordinate.latitude, loc.coordinate.longitude)
-    self.settings?.saveForecastLocation(to: location)
+    self.settings?.saveForecastLocation(as: location)
     self.fetcher?.getForecast(.all, for: forecastLoc, completion: { (forecast) in
       self.updateUIWith(forecast: forecast)
     })
   }
   
   func setForecastForCurrentLocation() {
-    settings?.clearForecastLocation()
+    currentLocation = true
     self.locManager.startUpdatingLocation()
   }
 }
@@ -165,17 +176,15 @@ extension LaunchViewController {
     let userLocation: CLLocation = locations[0] as CLLocation
     
     if let fetcher = self.fetcher {
-      if let coord = settings?.getSavedForecastCoordinates() {
+      if currentLocation {
+        fetcher.getForecast(.all, for: (lat: userLocation.coordinate.latitude, long: userLocation.coordinate.longitude)) { forecast in
+//          self.settings?.saveForecastLocation(as: userLocation)
+          self.updateUIWith(forecast: forecast)
+        }
+      } else if let coord = settings?.getSavedForecastCoordinates() {
         fetcher.getForecast(.all, for: coord, completion: { (forecast) in
-          print("getting from settings")
           self.updateUIWith(forecast: forecast)
         })
-      } else {
-        fetcher.getForecast(.all, for: (lat: userLocation.coordinate.latitude, long: userLocation.coordinate.longitude)) { forecast in
-          print("getting fresh forecast")
-          self.updateUIWith(forecast: forecast)
-          self.settings?.saveForecastLocation(to: userLocation)
-        }
       }
     }
   }

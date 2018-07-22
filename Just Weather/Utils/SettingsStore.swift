@@ -42,7 +42,7 @@ class SettingsStore {
     defaults?.set(nil, forKey: Keys.forecastLong.rawValue)
   }
   
-  func saveForecastLocation(to placemark: CLPlacemark) {
+  func saveForecastLocation(as placemark: CLPlacemark) {
     guard let loc = placemark.location else { return }
     defaults?.set(loc.coordinate.latitude, forKey: Keys.forecastLat.rawValue)
     defaults?.set(loc.coordinate.longitude, forKey: Keys.forecastLong.rawValue)
@@ -50,18 +50,18 @@ class SettingsStore {
     defaults?.set(placemark.locality ?? "No City Defined", forKey: Keys.forecastCity.rawValue)
   }
   
-  func saveForecastLocation(to location: CLLocation) {
+  func saveForecastLocation(as location: CLLocation) {
     let geoCoder = CLGeocoder()
     geoCoder.reverseGeocodeLocation(location) { (placemarks, error) in
       guard let marks = placemarks else { return }
-      self.saveForecastLocation(to: marks[0])
+      self.saveForecastLocation(as: marks[0])
     }
   }
   
-  func getSavedForecastCoordinates() -> (Double, Double)? {
+  func getSavedForecastCoordinates() -> (lat: Double, long: Double)? {
     guard let locationLat = defaults?.value(forKey: Keys.forecastLat.rawValue) as? Double else { return nil }
     guard let locationLong = defaults?.value(forKey: Keys.forecastLong.rawValue) as? Double else { return nil }
-    return (locationLat, locationLong)
+    return (lat: locationLat, long: locationLong)
   }
   
   func getSavedForecastCity() -> String? {
