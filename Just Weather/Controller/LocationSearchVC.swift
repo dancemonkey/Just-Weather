@@ -17,6 +17,7 @@ class LocationSearchVC: UIViewController, UITableViewDelegate, UITableViewDataSo
   // optional string for now, eventually need custom model result?
   var searchResults: [CLPlacemark]?
   var fetcher: WeatherFetcher?
+  var store: SettingsStore?
   weak var storageUpdateDelegate: LocationStorageUpdateProtocol?
   
   override func viewDidLoad() {
@@ -53,8 +54,7 @@ class LocationSearchVC: UIViewController, UITableViewDelegate, UITableViewDataSo
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     // store selected row then tap another button to save and go back to prior screen
     guard let results = self.searchResults else { return }
-    let store = SettingsStore()
-    store.saveForecastLocation(as: results[indexPath.row])
+    store!.saveForecastLocation(as: results[indexPath.row])
     storageUpdateDelegate?.updateLocations()
     self.navigationController?.popViewController(animated: true)
   }

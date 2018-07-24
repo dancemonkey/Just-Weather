@@ -24,14 +24,15 @@ class LaunchViewController: UIViewController, CLLocationManagerDelegate {
   var fetcher: WeatherFetcher?
   var weatherInfoView: WeatherInfoVC?
   var forecast: Forecast?
-  var settings: SettingsStore?
+  var store: SettingsStore?
+  var forecastLocation: ForecastLocation?
   var currentLocation: Bool = true
   
   override func viewDidLoad() {
     super.viewDidLoad()
     
-    self.settings = SettingsStore()
-    settings?.saveLastOpen()
+    self.store = SettingsStore()
+    store?.saveLastOpen()
     
     fetcher = WeatherFetcher()
     setupLocationManager()
@@ -72,21 +73,10 @@ class LaunchViewController: UIViewController, CLLocationManagerDelegate {
     
     // stop updating location in the closure until "refresh" is hit, set forecast property
     self.locManager.stopUpdatingLocation()
+    self.clearLabels()
     self.forecast = forecast
-    
-    // check for saved location in userdefaults
-    if currentLocation {
-      let geoCoder = CLGeocoder()
-      geoCoder.reverseGeocodeLocation(CLLocation(latitude: forecast.latitude, longitude: forecast.longitude)) { (placemarks, error) in
-        if let marks = placemarks {
-          self.title = marks[0].locality
-        }
-      }
-    } else if let city = settings?.getSavedForecastCity() {
-      self.title = city
-    }
+    self.title = forecastLocation!.locality
  
-    
     // populate view objects in the closure
     self.weatherIcon.image = UIImage(named: forecast.currently.icon)
     self.tempLabel.text = "\(Numbers().temperatureFormat(from: forecast.currently.temperature))°"
@@ -103,10 +93,10 @@ class LaunchViewController: UIViewController, CLLocationManagerDelegate {
   }
   
   @objc func autoRefreshForecast() {
-    guard let timeSinceOpen = settings?.timeSinceLastOpen() else { return }
+    guard let timeSinceOpen = store?.timeSinceLastOpen() else { return }
     if timeSinceOpen >= 5 {
       self.refreshWeather(sender: self.refreshBtn)
-      self.settings?.saveLastOpen()
+      self.store?.saveLastOpen()
     }
   }
   
@@ -133,6 +123,7 @@ class LaunchViewController: UIViewController, CLLocationManagerDelegate {
       let destVC = segue.destination as! LocationSelectVC
       destVC.forecastLocationDelegate = self
       destVC.fetcher = self.fetcher
+      destVC.store = self.store
     }
   }
 }
@@ -147,9 +138,8 @@ extension LaunchViewController: ForecastLocationSetProtocol {
   func setForecastLocation(for location: CLPlacemark) {
     guard let loc = location.location else { return }
     currentLocation = false
-    let forecastLoc: (lat: Double, long: Double) = (loc.coordinate.latitude, loc.coordinate.longitude)
-    self.settings?.saveForecastLocation(as: location)
-    self.fetcher?.getForecast(.all, for: forecastLoc, completion: { (forecast) in
+    self.forecastLocation = ForecastLocation(latitude: loc.coordinate.latitude, longitude: loc.coordinate.longitude, postalCode: location.postalCode, locality: location.locality)
+    self.fetcher?.getForecast(.all, for: (forecastLocation!.latitude, forecastLocation!.longitude), completion: { (forecast) in
       self.updateUIWith(forecast: forecast)
     })
   }
@@ -177,14 +167,19 @@ extension LaunchViewController {
     
     if let fetcher = self.fetcher {
       if currentLocation {
-        fetcher.getForecast(.all, for: (lat: userLocation.coordinate.latitude, long: userLocation.coordinate.longitude)) { forecast in
-//          self.settings?.saveForecastLocation(as: userLocation)
+        fetcher.getForecast(.all, for: (userLocation.coordinate.latitude, userLocation.coordinate.longitude)) { (forecast) in
+          let geoCoder = CLGeocoder()
+          geoCoder.reverseGeocodeLocation(userLocation, completionHandler: { (placemarks, error) in
+            if let marks = placemarks {
+              self.forecastLocation = ForecastLocation(latitude: marks[0].location!.coordinate.latitude, longitude: marks[0].location!.coordinate.longitude, postalCode: marks[0].postalCode, locality: marks[0].locality)
+              self.updateUIWith(forecast: forecast)
+            }
+          })
+        }
+      } else {
+        fetcher.getForecast(.all, for: (forecastLocation!.latitude, forecastLocation!.longitude)) { (forecast) in
           self.updateUIWith(forecast: forecast)
         }
-      } else if let coord = settings?.getSavedForecastCoordinates() {
-        fetcher.getForecast(.all, for: coord, completion: { (forecast) in
-          self.updateUIWith(forecast: forecast)
-        })
       }
     }
   }

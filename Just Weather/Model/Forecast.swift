@@ -20,6 +20,12 @@ struct Forecast: Codable {
   var daily: DailyWeather
   var alerts: [WeatherAlerts]?
   
+  var coordinates: (lat: Double, long: Double) {
+    get {
+      return (lat: self.latitude, long: self.longitude)
+    }
+  }
+  
   // MARK: Sub-Structs
   struct CurrentWeather: Codable {
     var time: Double

@@ -12,13 +12,20 @@ import CoreLocation
 class SettingsStore {
   
   private enum Keys: String {
-    case lastOpen, forecastLat, forecastLong, forecastCity, forecastZIP
+    case lastOpen, forecastLat, forecastLong, forecastCity, forecastZIP, locations
   }
   
   private var defaults: UserDefaults?
+  private var locations: [Data]?
   
   init() {
     self.defaults = UserDefaults()
+    self.locations = [Data]()
+    if let savedLocs = defaults?.array(forKey: Keys.locations.rawValue) {
+      for loc in savedLocs {
+        self.locations?.append(loc as! Data)
+      }
+    }
   }
   
   func saveLastOpen() {
@@ -35,19 +42,13 @@ class SettingsStore {
     return Int(timeSinceLastOpen/60)
   }
   
-  func clearForecastLocation() {
-    defaults?.removeObject(forKey: Keys.forecastCity.rawValue)
-    defaults?.removeObject(forKey: Keys.forecastZIP.rawValue)
-    defaults?.set(nil, forKey: Keys.forecastLat.rawValue)
-    defaults?.set(nil, forKey: Keys.forecastLong.rawValue)
-  }
-  
   func saveForecastLocation(as placemark: CLPlacemark) {
-    guard let loc = placemark.location else { return }
-    defaults?.set(loc.coordinate.latitude, forKey: Keys.forecastLat.rawValue)
-    defaults?.set(loc.coordinate.longitude, forKey: Keys.forecastLong.rawValue)
-    defaults?.set(placemark.postalCode ?? 00000, forKey: Keys.forecastZIP.rawValue)
-    defaults?.set(placemark.locality ?? "No City Defined", forKey: Keys.forecastCity.rawValue)
+    if self.locations == nil {
+      self.locations = [Data]()
+    }
+    let locData = NSKeyedArchiver.archivedData(withRootObject: placemark)
+    locations!.append(locData)
+    defaults?.set(self.locations, forKey: Keys.locations.rawValue)
   }
   
   func saveForecastLocation(as location: CLLocation) {
@@ -58,20 +59,25 @@ class SettingsStore {
     }
   }
   
-  func getSavedForecastCoordinates() -> (lat: Double, long: Double)? {
-    guard let locationLat = defaults?.value(forKey: Keys.forecastLat.rawValue) as? Double else { return nil }
-    guard let locationLong = defaults?.value(forKey: Keys.forecastLong.rawValue) as? Double else { return nil }
-    return (lat: locationLat, long: locationLong)
+  func getSavedForecasts() -> [CLPlacemark]? {
+    guard let locs = self.locations else {
+      return nil
+    }
+    var forecastLocations = [CLPlacemark]()
+    for loc in locs {
+      forecastLocations.append(NSKeyedUnarchiver.unarchiveObject(with: loc) as! CLPlacemark)
+    }
+    return forecastLocations
   }
   
-  func getSavedForecastCity() -> String? {
-    guard let city = defaults?.string(forKey: Keys.forecastCity.rawValue) else { return nil }
-    return city
-  }
-  
-  func getSavedForecastZip() -> Int? {
-    guard let zip = defaults?.integer(forKey: Keys.forecastZIP.rawValue) else { return nil }
-    return zip
+  func deleteForecastLocation(at index: Int) {
+    print("deleting this homey: \(locations?[index])")
+    print("removing object in store at location: \(index)")
+    print(self.locations?.count)
+    self.locations?.remove(at: index)
+    print(self.locations?.count)
+    print("saving freshly trimmed array to defaults")
+    self.defaults?.set(self.locations, forKey: Keys.locations.rawValue)
   }
   
 }

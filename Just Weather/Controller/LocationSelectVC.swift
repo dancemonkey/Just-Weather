@@ -13,6 +13,7 @@ class LocationSelectVC: UIViewController, LocationStorageUpdateProtocol {
   
   weak var forecastLocationDelegate: ForecastLocationSetProtocol?
   var fetcher: WeatherFetcher?
+  var store: SettingsStore?
   @IBOutlet weak var tableView: UITableView!
   
   // get from settings or core data and populate table
@@ -30,19 +31,12 @@ class LocationSelectVC: UIViewController, LocationStorageUpdateProtocol {
   }
   
   func updateLocations() {
-    let store = SettingsStore()
-    if let coord = store.getSavedForecastCoordinates() {
-      forecastLocations = [CLPlacemark]()
-      let geoCoder = CLGeocoder()
-      let loc = CLLocation(latitude: coord.lat, longitude: coord.long)
-      geoCoder.reverseGeocodeLocation(loc) { (placemarks, error) in
-        guard let marks = placemarks else { return }
-        for mark in marks {
-          self.forecastLocations?.append(mark)
-        }
-        self.tableView.reloadData()
-      }
+    if let locations = store!.getSavedForecasts() {
+      self.forecastLocations = locations
+    } else {
+      self.forecastLocations = [CLPlacemark]()
     }
+    self.tableView.reloadData()
   }
   
   override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -50,6 +44,7 @@ class LocationSelectVC: UIViewController, LocationStorageUpdateProtocol {
       let destVC = segue.destination as! LocationSearchVC
       destVC.fetcher = self.fetcher
       destVC.storageUpdateDelegate = self
+      destVC.store = self.store
     }
   }
   
@@ -64,7 +59,11 @@ extension LocationSelectVC: UITableViewDataSource {
   }
   
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    guard let locations = forecastLocations else { return 1 }
+    guard let locations = forecastLocations else {
+      print("one row")
+      return 1
+    }
+    print("number of rows = \(locations.count + 1)")
     return locations.count + 1
   }
   
@@ -80,6 +79,22 @@ extension LocationSelectVC: UITableViewDataSource {
       cell.textLabel?.text = locations[indexPath.row - 1].locality
       cell.detailTextLabel?.text = locations[indexPath.row - 1].postalCode
       return cell
+    }
+  }
+  
+  func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+    if indexPath.row == 0 {
+      return false
+    } else {
+      return true
+    }
+  }
+  
+  func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+    if editingStyle == .delete {
+      self.store!.deleteForecastLocation(at: indexPath.row - 1)
+      self.forecastLocations?.remove(at: indexPath.row - 1)
+      self.tableView.deleteRows(at: [indexPath], with: .fade)
     }
   }
 }
