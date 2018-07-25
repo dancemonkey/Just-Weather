@@ -60,10 +60,8 @@ extension LocationSelectVC: UITableViewDataSource {
   
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
     guard let locations = forecastLocations else {
-      print("one row")
       return 1
     }
-    print("number of rows = \(locations.count + 1)")
     return locations.count + 1
   }
   

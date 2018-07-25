@@ -71,12 +71,7 @@ class SettingsStore {
   }
   
   func deleteForecastLocation(at index: Int) {
-    print("deleting this homey: \(locations?[index])")
-    print("removing object in store at location: \(index)")
-    print(self.locations?.count)
     self.locations?.remove(at: index)
-    print(self.locations?.count)
-    print("saving freshly trimmed array to defaults")
     self.defaults?.set(self.locations, forKey: Keys.locations.rawValue)
   }
   

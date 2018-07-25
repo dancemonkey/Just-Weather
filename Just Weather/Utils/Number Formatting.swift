@@ -30,4 +30,18 @@ class Numbers {
     
     return formatter.string(from: NSNumber(value: double))!
   }
+  
+  func getHour(from time: Double) -> String {
+    let date = Date(timeIntervalSince1970: time)
+    let formatter = DateFormatter()
+    formatter.dateFormat = "h a"
+    return formatter.string(from: date)
+  }
+  
+  func getTimeAndDate(from time: Double) -> String {
+    let date = Date(timeIntervalSince1970: time)
+    let formatter = DateFormatter()
+    formatter.dateFormat = "MM-dd-yyyy HH:mm"
+    return formatter.string(from: date)
+  }
 }

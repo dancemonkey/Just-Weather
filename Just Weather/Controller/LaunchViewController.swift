@@ -106,7 +106,7 @@ class LaunchViewController: UIViewController, CLLocationManagerDelegate {
   }
   
   @IBAction func alertPressed(sender: UIBarButtonItem) {
-    // show alert info screen or something
+    performSegue(withIdentifier: "showWeatherAlerts", sender: self)
   }
   
   @IBAction func selectLocation(sender: UIBarButtonItem) {
@@ -124,6 +124,9 @@ class LaunchViewController: UIViewController, CLLocationManagerDelegate {
       destVC.forecastLocationDelegate = self
       destVC.fetcher = self.fetcher
       destVC.store = self.store
+    } else if segue.identifier == "showWeatherAlerts" {
+      let destVC = segue.destination as! WeatherAlertVC
+      destVC.weatherAlerts = self.forecast!.alerts!
     }
   }
 }

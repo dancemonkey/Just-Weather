@@ -11,6 +11,92 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
+        <!--Weather Alerts-->
+        <scene sceneID="V0a-Th-5pX">
+            <objects>
+                <viewController title="Weather Alerts" id="SiR-cM-mdM" customClass="WeatherAlertVC" customModule="Just_Weather" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Fr0-dO-fDd">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="150" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="IBO-bk-uKd">
+                                <rect key="frame" x="0.0" y="116" width="375" height="551"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="weatherAlertCell" id="uXB-dq-pco" customClass="WeatherAlertCell" customModule="Just_Weather" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="28" width="375" height="150"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="uXB-dq-pco" id="tr7-Qd-JfJ">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="149.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" alignment="top" spacing="4" translatesAutoresizingMaskIntoConstraints="NO" id="Fgw-8E-Ryd">
+                                                    <rect key="frame" x="8" y="4" width="359" height="71"/>
+                                                    <subviews>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tau-CB-QOh">
+                                                            <rect key="frame" x="0.0" y="0.0" width="41.5" height="24"/>
+                                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
+                                                            <nil key="textColor"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Time Issued" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pgV-Nn-mNY">
+                                                            <rect key="frame" x="0.0" y="28" width="87.5" height="19.5"/>
+                                                            <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                                            <nil key="textColor"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Time Expires" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6zD-9Q-NJd">
+                                                            <rect key="frame" x="0.0" y="51.5" width="93" height="19.5"/>
+                                                            <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                                            <nil key="textColor"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
+                                                    </subviews>
+                                                </stackView>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Description" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumFontSize="14" translatesAutoresizingMaskIntoConstraints="NO" id="0wl-9a-uMY">
+                                                    <rect key="frame" x="8" y="83" width="359" height="58.5"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="0wl-9a-uMY" firstAttribute="leading" secondItem="tr7-Qd-JfJ" secondAttribute="leading" constant="8" id="2oR-rP-hO9"/>
+                                                <constraint firstAttribute="bottom" secondItem="0wl-9a-uMY" secondAttribute="bottom" constant="8" id="GFL-bp-wDa"/>
+                                                <constraint firstItem="Fgw-8E-Ryd" firstAttribute="top" secondItem="tr7-Qd-JfJ" secondAttribute="top" constant="4" id="NFa-r4-q9O"/>
+                                                <constraint firstAttribute="trailing" secondItem="0wl-9a-uMY" secondAttribute="trailing" constant="8" id="T4x-pv-hSi"/>
+                                                <constraint firstItem="Fgw-8E-Ryd" firstAttribute="leading" secondItem="tr7-Qd-JfJ" secondAttribute="leading" constant="8" id="hjd-jD-NY2"/>
+                                                <constraint firstItem="0wl-9a-uMY" firstAttribute="top" secondItem="Fgw-8E-Ryd" secondAttribute="bottom" constant="8" id="nqz-Vz-alp"/>
+                                                <constraint firstAttribute="trailing" secondItem="Fgw-8E-Ryd" secondAttribute="trailing" constant="8" id="wUo-Ci-44J"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="descriptionLbl" destination="0wl-9a-uMY" id="AD4-VC-dUV"/>
+                                            <outlet property="timeExpiresLbl" destination="6zD-9Q-NJd" id="Omh-7C-cHP"/>
+                                            <outlet property="timeIssuedLbl" destination="pgV-Nn-mNY" id="goa-lB-r2U"/>
+                                            <outlet property="titleLbl" destination="tau-CB-QOh" id="aAK-3g-yTk"/>
+                                        </connections>
+                                    </tableViewCell>
+                                </prototypes>
+                            </tableView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="88o-wG-AWv" firstAttribute="trailing" secondItem="IBO-bk-uKd" secondAttribute="trailing" id="6DX-1o-Xv5"/>
+                            <constraint firstItem="88o-wG-AWv" firstAttribute="bottom" secondItem="IBO-bk-uKd" secondAttribute="bottom" id="AyJ-O2-jWc"/>
+                            <constraint firstItem="IBO-bk-uKd" firstAttribute="top" secondItem="88o-wG-AWv" secondAttribute="top" id="Rhl-J8-M5D"/>
+                            <constraint firstItem="IBO-bk-uKd" firstAttribute="leading" secondItem="88o-wG-AWv" secondAttribute="leading" id="fIX-i1-6uV"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="88o-wG-AWv"/>
+                    </view>
+                    <connections>
+                        <outlet property="tableView" destination="IBO-bk-uKd" id="dtb-Yc-DT1"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="a0f-3K-oqz" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1072" y="-698"/>
+        </scene>
         <!--Today-->
         <scene sceneID="tne-QT-ifu">
             <objects>
@@ -120,6 +206,7 @@
                         <outlet property="weatherIcon" destination="k60-ix-mh0" id="0In-v4-J7P"/>
                         <segue destination="nzy-Dj-Jue" kind="show" identifier="showWeeklyForecast" id="kZA-lZ-HWq"/>
                         <segue destination="TyB-b9-WQN" kind="show" identifier="showLocationSelect" id="hpL-Ie-V7S"/>
+                        <segue destination="SiR-cM-mdM" kind="show" identifier="showWeatherAlerts" id="C8G-AF-Fdu"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>

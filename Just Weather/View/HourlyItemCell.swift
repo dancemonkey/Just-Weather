@@ -16,7 +16,7 @@ class HourlyItemCell: UICollectionViewCell {
   @IBOutlet weak var chanceOfRainLbl: UILabel!
   
   func configure(from forecastData: Forecast.HourlyWeather.HourlyData) {
-    timeLbl.text = getHour(from: forecastData.time)
+    timeLbl.text = Numbers().getHour(from: forecastData.time)
     weatherIcon.image = UIImage(named: forecastData.icon)
     temperatureLbl.text = Numbers().temperatureFormat(from: forecastData.temperature) + "°"
     if forecastData.precipProbability >= 0.05 {
@@ -32,11 +32,11 @@ class HourlyItemCell: UICollectionViewCell {
     chanceOfRainLbl.text = ""
   }
   
-  func getHour(from time: Double) -> String {
-    let date = Date(timeIntervalSince1970: time)
-    let formatter = DateFormatter()
-    formatter.dateFormat = "h a"
-    return formatter.string(from: date)
-  }
+//  func getHour(from time: Double) -> String {
+//    let date = Date(timeIntervalSince1970: time)
+//    let formatter = DateFormatter()
+//    formatter.dateFormat = "h a"
+//    return formatter.string(from: date)
+//  }
   
 }
