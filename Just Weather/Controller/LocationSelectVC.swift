@@ -88,7 +88,7 @@ extension LocationSelectVC: UITableViewDataSource {
     }
   }
   
-  func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+  func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
     if editingStyle == .delete {
       self.store!.deleteForecastLocation(at: indexPath.row - 1)
       self.forecastLocations?.remove(at: indexPath.row - 1)

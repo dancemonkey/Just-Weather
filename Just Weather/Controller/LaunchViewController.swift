@@ -39,7 +39,7 @@ class LaunchViewController: UIViewController, CLLocationManagerDelegate {
     clearLabels()
     weatherInfoView?.segueDelegate = self
     
-    NotificationCenter.default.addObserver(self, selector: #selector(autoRefreshForecast), name: .UIApplicationDidBecomeActive, object: nil)
+    NotificationCenter.default.addObserver(self, selector: #selector(autoRefreshForecast), name: UIApplication.didBecomeActiveNotification, object: nil)
   }
   
   @objc func clearLabels() {

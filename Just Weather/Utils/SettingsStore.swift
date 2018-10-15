@@ -46,7 +46,16 @@ class SettingsStore {
     if self.locations == nil {
       self.locations = [Data]()
     }
-    let locData = NSKeyedArchiver.archivedData(withRootObject: placemark)
+    
+    var locData: Data!
+    do {
+      locData = try NSKeyedArchiver.archivedData(withRootObject: placemark, requiringSecureCoding: false)
+    } catch {
+      print("archiving placemark failed")
+    }
+    
+//    let locData = NSKeyedArchiver.archivedData(withRootObject: placemark)
+    
     locations!.append(locData)
     defaults?.set(self.locations, forKey: Keys.locations.rawValue)
   }
@@ -64,8 +73,15 @@ class SettingsStore {
       return nil
     }
     var forecastLocations = [CLPlacemark]()
+    var pm: CLPlacemark!
     for loc in locs {
-      forecastLocations.append(NSKeyedUnarchiver.unarchiveObject(with: loc) as! CLPlacemark)
+      do {
+        pm = try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(loc) as? CLPlacemark
+      } catch {
+        print("failed to unarchive saved forecast location")
+      }
+      forecastLocations.append(pm)
+//      forecastLocations.append(NSKeyedUnarchiver.unarchiveObject(with: loc) as! CLPlacemark)
     }
     return forecastLocations
   }

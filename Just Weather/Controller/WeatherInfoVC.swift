@@ -102,7 +102,7 @@ extension WeatherInfoVC: UICollectionViewDataSource, UICollectionViewDelegate {
   }
   
   func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-    return 12
+    return 23
   }
   
 }

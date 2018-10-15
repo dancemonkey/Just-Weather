@@ -18,7 +18,7 @@ class WeatherAlertVC: UIViewController {
     super.viewDidLoad()
     tableView.dataSource = self
     tableView.delegate = self
-    tableView.rowHeight = UITableViewAutomaticDimension
+    tableView.rowHeight = UITableView.automaticDimension
     tableView.estimatedRowHeight = 150
     self.title = "\(weatherAlerts.count) Weather Alert" + (weatherAlerts.count > 1 ? "s" : "")
   }
